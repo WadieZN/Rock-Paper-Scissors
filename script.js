@@ -1,62 +1,98 @@
+// Start Computer Logic
+
 function getComputerSelection() {
-    const choice = ["rock", "paper", "scissors"];
-    const randomChoice = Math.floor(Math.random() * 3);
-    return choice[randomChoice];
+    const choice = ['rock', 'paper', 'scissors'];
+    const randomChoice = choice[Math.floor(Math.random() * 3)];
+    return randomChoice;
 }
 
-function playRound(playerSelection, computerSelection) {
+// End Computer Logic
 
-    playerSelection = playerSelection.toLowerCase();
+// Start One Round Logic
+
+function playRound(playerSelection, computerSelection) {
 
     if ((playerSelection === "rock" && computerSelection === "scissors") ||
         (playerSelection === "paper" && computerSelection === "rock") ||
         (playerSelection === "scissors" && computerSelection === "paper")
     ) {
         return ("You win");
+
     } else if ((computerSelection === "rock" && playerSelection === "scissors") ||
         (computerSelection === "paper" && playerSelection === "rock") ||
         (computerSelection === "scissors" && playerSelection === "paper")) {
         return ("Computer wins");
-    } else if (playerSelection.toLowerCase() === computerSelection) {
-        return ("Tie game");
+
     } else {
-        return ("Wrong input");
+        return ("Tie game");
     }
 }
 
-function game() {
+// End One Round Logic
 
-    let playerScore = 0;
-    let computerScore = 0;
+// Start Main Game Logic
 
-    for (let round = 1; round <= 5; round++) {
+const rock = document.querySelector('#rock');
+const paper = document.querySelector('#paper');
+const scissors = document.querySelector('#scissors');
+const container = document.querySelector('.result');
+const winner = document.createElement('p');
+let message = '';
+let playerScore = 1;
+let computerScore = 1;
 
-        console.log(`Round ${round}`);
+rock.addEventListener('click', () => {
+    game('rock');
+});
 
-        const playerSelection = prompt("Rock, Paper or Scissors?");
-        const computerSelection = getComputerSelection();
-        const result = playRound(playerSelection, computerSelection);
+paper.addEventListener('click', () => {
+    game('paper');
+});
 
-        if (result === "You win") {
-            playerScore++;
-        } else if (result === "Computer wins") {
-            computerScore++;
+scissors.addEventListener('click', () => {
+    game('scissors');
+});
+
+function game(choice) {
+
+    const playerSelection = choice;
+    const computerSelection = getComputerSelection();
+    const result = playRound(playerSelection, computerSelection);
+
+    const pScore = document.createElement('p');
+    pScore.textContent = `- Your score : ${playerScore}`;
+    const cScore = document.createElement('p');
+    cScore.textContent = `- Computer score : ${computerScore}`;
+    const displayResult = document.createElement('p');
+    displayResult.textContent = result;
+    container.appendChild(displayResult);
+
+    if (result === "You win") {
+        playerScore++;
+        container.appendChild(pScore);
+    } else if (result === "Computer wins") {
+        computerScore++;
+        container.appendChild(cScore);
+    }
+    if (playerScore === 6 || computerScore === 6) {
+
+
+        if (computerScore > playerScore) {
+            message = "-- Computer wins the game!";
+        } else if (playerScore > computerScore) {
+            message = "-- Congratulations! You win the game!!";
         } else {
+            message = "-- Tie game, no one wins";
         }
 
-        console.log(result);
+        winner.textContent = message;
+        winner.style.color = '#c1c1c1';
+        container.appendChild(winner);
 
+        playerScore = 1;
+        computerScore = 1;
     }
 
-    if (playerScore < computerScore) {
-        console.log("Computer wins the game!");
-    } else if (playerScore > computerScore) {
-        console.log("Congratulations! You win the game!!");
-    } else if (computerScore === playerScore  && computerScore != 0 && playerScore != 0) {
-        console.log("Tie game, no one wins");
-    } else {
-        console.log("Too many wrong inputs");
-    }
 }
 
-game();
+// End Main Game Logic
